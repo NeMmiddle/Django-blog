@@ -1,16 +1,10 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import ListView,DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView
 
 from .forms import *
 from .models import *
-
-menu = [{'title': "О сайте", 'url_name': 'about'},
-        {'title': "Добавить статью", 'url_name': 'add_page'},
-        {'title': "Обратная связь", 'url_name': 'contact'},
-        {'title': "Войти", 'url_name': 'login'}
-        ]
 
 
 class WomenHome(ListView):
@@ -26,7 +20,8 @@ class WomenHome(ListView):
         return context
 
     def get_queryset(self):
-        return Women.objects.filter(is_published = True)
+        return Women.objects.filter(is_published=True)
+
 
 # def index(request):
 #     posts = Women.objects.all()
@@ -44,6 +39,7 @@ class WomenHome(ListView):
 def about(request):
     return render(request, 'women/about.html', {'menu': menu, 'title': 'О сайте'})
 
+
 class AddPage(CreateView):
     form_class = AddPostForm
     template_name = 'women/addpage.html'
@@ -52,8 +48,9 @@ class AddPage(CreateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Добавление статьи'
-        context['menu'] =  menu
+        context['menu'] = menu
         return context
+
 
 # def addpage(request):
 #     if request.method == 'POST':
@@ -100,9 +97,8 @@ class ShowPost(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = context['post']
-        context['menu'] =  menu
+        context['menu'] = menu
         return context
-
 
 
 class WomenCategory(ListView):
@@ -117,10 +113,9 @@ class WomenCategory(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Категория - ' + str(context['posts'][0].cat)
-        context['menu'] =  menu
+        context['menu'] = menu
         context['cat_selected'] = context['posts'][0].cat_id
         return context
-
 
 # def show_category(request, cat_id):
 #     posts = Women.objects.filter(cat_id=cat_id)
@@ -136,4 +131,3 @@ class WomenCategory(ListView):
 #     }
 #
 #     return render(request, 'women/index.html', context=context)
-
